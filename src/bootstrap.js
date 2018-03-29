@@ -1,7 +1,7 @@
 /* global app, $on */
-(function(window) {
-  'use strict'
+(function (window) {
+    'use strict'
 
-  $on(window, 'load', app.onLoad)
-  $on(window, 'hashchange', app.onLoad)
+    $on(window, 'load', app.onLoad)
+    $on(window, 'hashchange', app.onLoad)
 })(window)

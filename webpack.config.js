@@ -1,11 +1,15 @@
+const webpackValidator = require('webpack-validator')
 const { resolve } = require('path')
 
-module.exports = () => {
-    return {
+module.exports = env => {
+    return webpackValidator({
         context: resolve('src'),
         entry: './bootstrap.js',
         output: {
-            filename: 'bundle.js'
-        }
-    }
+            path: resolve('dist'),
+            filename: 'bundle.js',
+            publicPath: "/dist/",
+        },
+        devtool: env.prod ? 'source-map' : 'eval'
+    })
 }
