@@ -1,3 +1,5 @@
+require('todomvc-app-css/index.css')
+
 var View = require('./view')
 var Controller = require('./controller')
 var helpers = require('./helpers')

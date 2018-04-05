@@ -21,6 +21,7 @@ module.exports = env => {
                     test: /\.js$/, loaders: ['babel-loader'] /* BREAKING CHANGE: It's no longer allowed to omit the '-loader' suffix when using loaders. */,
                     exclude: /node_modules/
                 },
+                { test: /\.css$/, loaders: ['style-loader', 'css-loader'] },
             ],
         },
     })
