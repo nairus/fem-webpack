@@ -1,5 +1,4 @@
 /*global NodeList */
-'use strict'
 
 module.exports = {
     qs: qs,

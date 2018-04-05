@@ -15,6 +15,14 @@ module.exports = env => {
             pathinfo: ifNotProd(),
         },
         devtool: ifProd('source-map', 'eval'),
+        module: {
+            loaders: [
+                {
+                    test: /\.js$/, loaders: ['babel-loader'] /* BREAKING CHANGE: It's no longer allowed to omit the '-loader' suffix when using loaders. */,
+                    exclude: /node_modules/
+                },
+            ],
+        },
     })
     if (env.debug) {
         console.log(config)
