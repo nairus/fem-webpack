@@ -1,4 +1,5 @@
-const webpackEnv = { env: "test" }
+process.env.BABEL_ENV = 'test'
+const webpackEnv = { test: true }
 const webpackConfig = require('./webpack.config.babel')(webpackEnv)
 const fileGlob = 'src/**/*.test.js'
 const preprocessors = {
@@ -11,7 +12,14 @@ module.exports = config => {
         files: [fileGlob],
         preprocessors,
         webpack: webpackConfig,
-        reporters: ['progress'],
+        reporters: ['progress', 'coverage'],
+        coverageReporter: {
+            reporters: [
+                { type: 'lcov', dir: 'coverage/', subdir: '.' },
+                { type: 'json', dir: 'coverage/', subdir: '.' },
+                { type: 'text-summary' },
+            ]
+        },
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

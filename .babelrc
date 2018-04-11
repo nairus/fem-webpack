@@ -3,5 +3,17 @@
         "es2015",
         "es2016",
         "stage-2"
-    ]
+    ],
+    "env": {
+        "test": {
+            "plugins": [
+                [
+                    "__coverage__",
+                    {
+                        "ignore": "*.+(test|stub).*"
+                    }
+                ]
+            ]
+        }
+    }
 }
