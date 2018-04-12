@@ -1,24 +1,36 @@
 process.env.BABEL_ENV = 'test'
 const webpackEnv = { test: true }
 const webpackConfig = require('./webpack.config.babel')(webpackEnv)
-const fileGlob = 'src/**/*.test.js'
+const testGlob = 'src/**/*.test.js'
+const srcGlob = 'src/**/!(*.test|*.stub).js'
 const preprocessors = {
-    [fileGlob]: ['webpack']
+    [testGlob]: ['webpack'],
+    [srcGlob]: ['webpack']
 }
 module.exports = config => {
     config.set({
         basePath: '',
         frameworks: ['mocha', 'chai'],
-        files: [fileGlob],
+        files: [testGlob, srcGlob],
+        exclude: ['src/bootstrap.js'],
         preprocessors,
         webpack: webpackConfig,
+        webpackMiddleware: { noInfo: true },
         reporters: ['progress', 'coverage'],
         coverageReporter: {
+            check: {
+                global: {
+                    statements: 11,
+                    branches: 0,
+                    functions: 0,
+                    lines: 11,
+                },
+            },
             reporters: [
                 { type: 'lcov', dir: 'coverage/', subdir: '.' },
                 { type: 'json', dir: 'coverage/', subdir: '.' },
                 { type: 'text-summary' },
-            ]
+            ],
         },
         port: 9876,
         colors: true,

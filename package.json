@@ -29,8 +29,8 @@
         "style-loader": "0.20.3",
         "webpack": "^2.7.0",
         "webpack-config-utils": "2.0.0",
-        "webpack-validator": "^2.2.0",
-        "webpack-dev-server": "^2.2.7"
+        "webpack-dev-server": "^2.2.7",
+        "webpack-validator": "^2.2.0"
     },
     "config": {
         "ghooks": {
