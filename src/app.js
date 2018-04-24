@@ -2,7 +2,6 @@ import 'todomvc-app-css/index.css'
 
 import View from './view'
 import Controller from './controller'
-import { log } from './helpers'
 import Model from './model'
 import Store from './store'
 import Template from './template'
@@ -23,5 +22,4 @@ function Todo(name) {
 export function onLoad() { // eslint-disable-line import/prefer-default-export     const todo = new Todo('todos-vanillajs')
     const todo = new Todo('todos-vanillajs')
     todo.controller.setView(document.location.hash)
-    log('view set')
 }
