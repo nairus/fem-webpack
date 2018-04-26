@@ -1,3 +1,5 @@
+import { remove } from './helpers'
+
 /**
  * Creates a new client side storage object and will create an empty
  * collection if no collection already exists.
@@ -18,7 +20,18 @@ export default class Store {
             localStorage[name] = JSON.stringify(data);
         }
         callback.call(this, JSON.parse(localStorage[name]));
+        this.subscribers = []
     }
+
+    subscribe(subscriber) {
+        this.subscribers.push(subscriber)
+        return () => remove(this.subscribers, subscriber)
+    }
+
+    _notify() {
+        this.subscribers.forEach(s => s())
+    }
+
     /**
      * Finds items based on a query given as a JS object
      *
@@ -89,6 +102,7 @@ export default class Store {
             localStorage[this._dbName] = JSON.stringify(data);
             callback.call(this, [updateData]);
         }
+        this._notify()
     }
     /**
      * Will remove an item from the Store based on its ID
@@ -98,15 +112,16 @@ export default class Store {
      */
     remove(id, callback) {
         var data = JSON.parse(localStorage[this._dbName]);
-        var todos = data.todos;
+        var todos = data.todos
         for (var i = 0; i < todos.length; i++) {
             if (todos[i].id === id) {
-                todos.splice(i, 1);
-                break;
+                todos.splice(i, 1)
+                break
             }
         }
-        localStorage[this._dbName] = JSON.stringify(data);
-        callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
+        localStorage[this._dbName] = JSON.stringify(data)
+        callback.call(this, JSON.parse(localStorage[this._dbName]).todos)
+        this._notify()
     }
     /**
      * Will drop all storage and start fresh
@@ -114,8 +129,9 @@ export default class Store {
      * @param {function} callback The callback to fire after dropping the data
      */
     drop(callback) {
-        localStorage[this._dbName] = JSON.stringify({ todos: [] });
-        callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
+        localStorage[this._dbName] = JSON.stringify({ todos: [] })
+        callback.call(this, JSON.parse(localStorage[this._dbName]).todos)
+        this._notify()
     }
 }
 

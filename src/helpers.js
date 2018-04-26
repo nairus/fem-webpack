@@ -1,6 +1,6 @@
 /*global NodeList */
 
-export { qs, qsa, $on, $delegate, $parent }
+export { qs, qsa, $on, $delegate, $parent, remove }
 
 // Get element(s) by CSS selector:
 function qs(selector, scope) {
@@ -45,6 +45,18 @@ function $parent(element, tagName) {
         return element.parentNode
     }
     return $parent(element.parentNode, tagName)
+}
+
+// removes an element from an array
+// const x = [1,2,3]
+// remove(x, 2)
+// x ~== [1,3]
+function remove(array, thing) {
+    const index = array.indexOf(thing)
+    if (index === -1) {
+        return array
+    }
+    array.splice(index, 1)
 }
 
 // Allow for looping on nodes by chaining:
