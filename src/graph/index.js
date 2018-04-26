@@ -1,48 +1,53 @@
-import {subscribe, getTodo} from '../todo'
-import renderGraph from './render'
+import { subscribe, getTodo } from '../todo'
 
 let graphArea
 const unsubscribe = {
-  store: null,
-  todo: null,
+    store: null,
+    todo: null,
 }
 
 export default toggleGraph
 
 function toggleGraph() {
-  if (graphArea) {
-    graphArea.remove()
-    graphArea = null
-    unsubscribe.store()
-    unsubscribe.todo()
-    return false
-  } else {
-    graphArea = document.createElement('div')
-    document.body.querySelector('.graph-area-container').appendChild(graphArea)
-    const {storage} = getTodo()
-    renderGraph(graphArea, storage)
-    updateTodoSubscription()
-    updateStoreSubscription(storage)
-    return true
-  }
+    if (graphArea) {
+        graphArea.remove()
+        graphArea = null
+        unsubscribe.store()
+        unsubscribe.todo()
+        return false
+    } else {
+        graphArea = document.createElement('div')
+        document.body.querySelector('.graph-area-container').appendChild(graphArea)
+        const { storage } = getTodo()
+        loadAndRenderGraph(graphArea, storage)
+        updateTodoSubscription()
+        updateStoreSubscription(storage)
+        return true
+    }
 }
 
 function updateTodoSubscription() {
-  if (unsubscribe.todo) {
-    unsubscribe.todo()
-  }
-  unsubscribe.todo = subscribe(function onTodoUpdate() {
-    const {storage} = getTodo()
-    updateStoreSubscription(storage)
-    renderGraph(graphArea, storage)
-  })
+    if (unsubscribe.todo) {
+        unsubscribe.todo()
+    }
+    unsubscribe.todo = subscribe(function onTodoUpdate() {
+        const { storage } = getTodo()
+        updateStoreSubscription(storage)
+        loadAndRenderGraph(graphArea, storage)
+    })
 }
 
 function updateStoreSubscription(store) {
-  if (unsubscribe.store) {
-    unsubscribe.store()
-  }
-  unsubscribe.store = store.subscribe(function onStoreUpdate() {
-    renderGraph(graphArea, store)
-  })
+    if (unsubscribe.store) {
+        unsubscribe.store()
+    }
+    unsubscribe.store = store.subscribe(function onStoreUpdate() {
+        loadAndRenderGraph(graphArea, store)
+    })
+}
+function loadAndRenderGraph(graphArea, storage) {
+    //renderGraph(graphArea, storage)
+    System.import("./render").then(
+        m => console.log(m.default(graphArea, storage))
+    );
 }
