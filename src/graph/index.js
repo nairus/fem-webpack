@@ -45,8 +45,8 @@ function updateStoreSubscription(store) {
         loadAndRenderGraph(graphArea, store)
     })
 }
-function loadAndRenderGraph(graphArea, storage) {
+function loadAndRenderGraph(node, store) {
     System.import("./render").then(
-        m => console.log(m.default(graphArea, storage))
+        ({ default: renderGraph }) => renderGraph(node, store)
     );
 }
