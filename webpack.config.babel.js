@@ -1,5 +1,6 @@
 /* eslint no-console:"off" */
 const { resolve } = require('path')
+const webpack = require('webpack')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const webpackValidator = require('webpack-validator')
 const { getIfUtils } = require('webpack-config-utils')
@@ -8,9 +9,12 @@ module.exports = env => {
     const { ifProd, ifNotProd } = getIfUtils(env)
     const config = webpackValidator({
         context: resolve('src'),
-        entry: './bootstrap.js',
+        entry: {
+            'app': './bootstrap.js',
+            'vendor': ['todomvc-app-css/index.css']
+        },
         output: {
-            filename: 'bundle.js',
+            filename: 'bundle.[name].js',
             path: resolve('dist'),
             publicPath: '/dist/',
             pathinfo: ifNotProd(),
@@ -26,7 +30,10 @@ module.exports = env => {
             ],
         },
         plugins: [
-            new ProgressBarPlugin()
+            new ProgressBarPlugin(),
+            new webpack.optimize.CommonsChunkPlugin({
+                name: 'vendor',
+            })
         ],
     })
     if (env.debug) {
