@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const webpackValidator = require('webpack-validator')
 const { getIfUtils, removeEmpty } = require('webpack-config-utils')
 
@@ -27,18 +28,24 @@ module.exports = env => {
                     test: /\.js$/, loaders: ['babel-loader'] /* BREAKING CHANGE: It's no longer allowed to omit the '-loader' suffix when using loaders. */,
                     exclude: /node_modules/
                 },
-                { test: /\.css$/, loaders: ['style-loader', 'css-loader'] },
+                {
+                    test: /\.css$/,
+                    loader: ExtractTextPlugin.extract({
+                        fallbackLoader: 'style',
+                        loader: 'css',
+                    })
+                },
             ],
         },
         plugins: removeEmpty([
             new ProgressBarPlugin(),
+            new ExtractTextPlugin(ifProd('styles.[name].[chunkhash].css', 'styles.[name].css')),
             ifProd(new InlineManifestWebpackPlugin()),
             ifProd(new webpack.optimize.CommonsChunkPlugin({
-                name: ['vendor', 'manifest'],
+                names: ['vendor', 'manifest'],
             })),
             new HtmlWebpackPlugin({
                 template: './index.html',
-                inject: 'head'
             }),
         ]),
     })
