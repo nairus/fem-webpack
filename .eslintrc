@@ -8,7 +8,7 @@
         "kentcdodds/import/possible-errors",
         "kentcdodds/mocha",
         "kentcdodds/webpack",
-        "kentctodds/react",
+        "kentcdodds/react",
     ],
     "rules": {
         // these are only here because I did not
